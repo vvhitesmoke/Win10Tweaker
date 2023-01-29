@@ -14,7 +14,7 @@ class WTTweakBase {
     [ValidateNotNullOrEmpty()][string]$Description = "Base"
 
     [WTTweakActions]$AllowedOperations = [WTTweakActions]::None
-    [WTTweakCategories[]]$Categories = @( [WTTweakCategories]::Unknown )
+    [WTTweakCategories[]]$Categories = [WTTweakCategories]::Unknown
     
     [bool] SwitchFeature([string]$Operation) {
         [bool]$ret = $false
