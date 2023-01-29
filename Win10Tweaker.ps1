@@ -71,8 +71,8 @@ function Initialize-WTTweaks {
 function Show-WTUsage {
     [WTOut]::Print(@"
 Usage:
-  .\WinTweaker.ps1 [-recipe] <recipe_name> [-verbose | -silent]
-  .\WinTweaker.ps1 -list [-verbose]
+  .\Win10Tweaker.ps1 [-recipe] <recipe_name> [-verbose | -silent]
+  .\Win10Tweaker.ps1 -list [-verbose]
 
 "@)
 }
