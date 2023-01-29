@@ -1,0 +1,90 @@
+﻿@{
+    RecipeName = 'Template'
+    RecipeVersion = '0.0'
+    RecipeAuthor = 'Piotr Gludkowski, VillageTech'
+
+    RecipeTweaks = @{
+# Settings
+        AccesibilityKeys = "Disable"
+
+# Windows applications
+        #AlarmsAndClock = 'Remove'
+        #Camera = 'Remove'
+        #Communications = 'Remove'
+        Cortana = 'Remove'
+        GetHelp = 'Remove'
+        GetStarted = 'Remove'
+        #GetOffice = 'Remove'
+        #GetSkype = 'Remove'
+        #Maps = 'Remove'
+        #Messaging = 'Remove'
+
+# Microsoft applications
+        #3DBuilder = 'Remove'
+        #3DViewer = 'Remove'
+        #OneCalendar = 'Remove'
+        #OneConnect = 'Remove'
+        #OneNote = 'Remove'
+        #People = 'Remove'
+        #Photos = 'Remove'
+        #PlexServer = 'Remove'
+        Reader = 'Remove'
+        #SoundRecorder = 'Remove'
+        Spotify = 'Remove'
+        Sway = 'Remove'
+        Twitter = 'Remove'
+        Viber = 'Remove'
+        #WindowsStore = 'Remove'
+        #WindowsPhone = 'Remove'
+        #YourPhone = 'Remove'
+
+        #SolitaireCollection = 'Remove'
+
+# Bing applications
+        Finance = 'Remove'
+        FoodAndDrink = 'Remove'
+        HealthAndFitness = 'Remove'
+        News = 'Remove'
+        Sports = 'Remove'
+        Travel = 'Remove'
+        #Weather = 'Remove'
+
+# Zune applications
+        GrooveMusic = 'Remove'
+        MoviesAndTV = 'Remove'
+
+# XBox
+        XBoxApp = 'Remove'
+        XBoxBar = 'Remove'
+    }
+}
+
+/*
+
+disable auto defragmentation!!!!
+disable hibernation!!!!
+
+
+example:
+--------
+
+# Create a PSD1 file
+@"
+@{
+    Name = 'explorer.exe'
+    Length = 4532304
+    DirectoryName = 'C:\Windows'
+    VersionInfo = @{
+      ProductVersion = '10.0.10240.16384'
+    }
+}
+"@ | Out-File -FilePath C:\PSD1.psd1
+
+# Read the file
+$File = Import-LocalizedData -BaseDirectory C:\ -FileName PSD1.psd1
+or Import-PowerShellDataFile (see: https://learn.microsoft.com/en-gb/powershell/module/Microsoft.PowerShell.Utility/import-powershelldatafile?view=powershell-5.1)
+
+# Drill down.
+$File.VersionInfo.ProductVersion
+
+*/
