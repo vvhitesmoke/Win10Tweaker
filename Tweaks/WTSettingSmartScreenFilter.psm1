@@ -10,7 +10,7 @@ class WTSettingSmartScreenFilter : WTTweakBase {
     WTSettingSmartScreenFilter() {
         $this.Name = "SettingSmartScreenFilter"
         $this.Alias = "SmartScreenFilter"
-        $this.Description = "SmartScreen Filter"
+        $this.Description = "SmartScreen anti-phishing filter"
         $this.AllowedOperations = @( "Enable", "Disable" )
     }
 
