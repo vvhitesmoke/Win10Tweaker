@@ -4,6 +4,8 @@
 # author: Piotr Gludkowski, VillageTech #
 #########################################
 
+Using module .\WTTweakActions.psm1
+Using module .\WTTweakCategories.psm1
 Using module ..\WTOut.psm1
 
 class WTTweakBase {
@@ -11,26 +13,27 @@ class WTTweakBase {
     [ValidateNotNullOrEmpty()][string]$Alias       = "Base"
     [ValidateNotNullOrEmpty()][string]$Description = "Base"
 
-    [string[]]$AllowedOperations = @()
+    [WTTweakActions]$AllowedOperations = [WTTweakActions]::None
+    [WTTweakCategories[]]$Categories = @( [WTTweakCategories]::Unknown )
     
     [bool] SwitchFeature([string]$Operation) {
         [bool]$ret = $false
-
-        if (-not $this.AllowedOperations.Contains($Operation)) {
-            [WTOut]::Error("Invalid operation: $Operation")
-        }
-
-        switch ($Operation) {
-            "Enable" {
+        [WTTweakActions]$action = $this.GetOperationFromString($Operation)
+        switch ($action) {
+            [WTTweakActions]::Enable {
                 $ret = $this.EnableFeature()
             }
 
-            "Disable" {
+            [WTTweakActions]::Disable {
                 $ret = $this.DisableFeature()
             }
 
-            "Remove" {
+            [WTTweakActions]::Remove {
                 $ret = $this.RemoveFeature()
+            }
+
+            default {
+                [WTOut]::Error("Invalid operation: $Operation")
             }
         }
 
@@ -50,5 +53,14 @@ class WTTweakBase {
     [bool] RemoveTweak() {
         [WTOut]::Fail("Method not implemented")
         return $false
+    }
+
+    hidden [WTTweakActions] GetOperationFromString([string]$operationName) {
+        [WTTweakActions]$operation = [WTTweakActions]::None
+        if (([string[]]$this.AllowedOperations).Contains($operationName)) {
+            $operation = [WTTWeakActions]$operationName
+        }
+
+        return $operation
     }
 }

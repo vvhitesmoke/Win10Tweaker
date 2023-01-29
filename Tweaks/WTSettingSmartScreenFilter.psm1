@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech       #
 ###############################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTSettingSmartScreenFilter : WTTweakBase {
     WTSettingSmartScreenFilter() {
         $this.Name = "SettingSmartScreenFilter"
         $this.Alias = "SmartScreenFilter"
         $this.Description = "SmartScreen anti-phishing filter"
-        $this.AllowedOperations = @( "Enable", "Disable" )
+        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
     }
 
     [bool]EnableTweak() {

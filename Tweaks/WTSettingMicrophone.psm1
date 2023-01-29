@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech #
 #########################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTSettingMicrophone : WTTweakBase {
     WTSettingMicrophone() {
         $this.Name        = "SettingMicrophone"
         $this.Alias       = "Microphone"
         $this.Description = "Access to microphone"
-        $this.AllowedOperations = @( "Enable", "Disable" )
+        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
     }
 
     [bool]EnableTweak() {

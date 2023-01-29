@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech #
 #########################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTFeatureCortana : WTTweakBase {
     WTFeatureCortana() {
         $this.Name        = "FeatureCortana"
         $this.Alias       = "Cortana"
         $this.Description = "Cortana appliaction"
-        $this.AllowedOperations = @( "Remove" )
+        $this.AllowedOperations = [WTTweakActions]::Remove
     }
 
     [bool]RemoveTweak() {

@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech        #
 ################################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTFeatureMicrosoftYourPhone : WTTweakBase {
     WTFeatureMicrosoftYourPhone() {
         $this.Name        = "MicrosoftYourPhone"
         $this.Alias       = "PhoneLink"
         $this.Description = "Microsoft Your Phone application"
-        $this.AllowedOperations = @( "Remove" )
+        $this.AllowedOperations = [WTTweakActions]::Remove
     }
 
     [bool]RemoveTweak() {

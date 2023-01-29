@@ -7,7 +7,12 @@
 Using module .\WTConfig.psm1
 
 class WTOut {
+    hidden static [int]$_errorsCtr = 0
+
 # Logging/diagnostics
+    static [void] Initialize() {
+        [WTOut]::_errorsCtr = 0
+    }
 
     static [void] Print([string]$message) {
         if (! [WTConfig]::GetSilentSwitch()) {
@@ -23,8 +28,9 @@ class WTOut {
     }
 
     static [void] Error([string]$message) {
+        [WTOut]::_errorsCtr++
         if (! [WTConfig]::GetSilentSwitch()) {
-            Write-Host "Error: $message"
+            Write-Host "Error # $([WTOut]::_errorsCtr): $message"
         }
     }
 
@@ -38,5 +44,9 @@ class WTOut {
         if ([WTConfig]::GetVerboseSwitch()) {
             Write-Host "Trace: $message"
         }
+    }
+
+    static [int] GetErrorsCount() {
+        return [WTOut]::_errorsCtr
     }
 }

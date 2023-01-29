@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech       #
 ###############################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTSettingWebAccessLangList : WTTweakBase {
     WTSettingWebAccessLangList() {
         $this.Name        = "SettingWebAccessLangList"
         $this.Alias       = "WebAccessLangList"
         $this.Description = "Website Access to Language List"
-        $this.AllowedOperations = @( "Enable", "Disable" )
+        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
     }
 
     [bool]EnableTweak() {

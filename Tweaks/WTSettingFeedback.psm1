@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech #
 #########################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTSettingFeedback : WTTweakBase {
     WTSettingFeedback() {
         $this.Name        = "SettingFeedback"
         $this.Alias       = "Feedback"
         $this.Description = "Automatic Maps updates"
-        $this.AllowedOperations = @( "Enable", "Disable" )
+        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
     }
 
     [bool]EnableTweak() {

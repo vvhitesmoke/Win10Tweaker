@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech #
 #########################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTSettingBiometrics : WTTweakBase {
     WTSettingBiometrics() {
         $this.Name        = "SettingBiometrics"
         $this.Alias       = "Biometrics"
         $this.Description = "Biometric features (fingerprint, Windows Hello etc.)"
-        $this.AllowedOperations = @( "Enable", "Disable" )
+        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
     }
 
     [bool]EnableTweak() {

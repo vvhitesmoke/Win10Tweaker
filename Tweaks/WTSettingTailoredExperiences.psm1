@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech          #
 ##################################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTSettingTailoredExperiences : WTTweakBase {
     WTSettingTailoredExperiences() {
         $this.Name        = "SettingTailoredExperiences"
         $this.Alias       = "TailoredExperiences"
         $this.Description = "Cloud content tailored experiences with diagnostic data"
-        $this.AllowedOperations = @( "Enable", "Disable" )
+        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
     }
 
     [bool]EnableTweak() {

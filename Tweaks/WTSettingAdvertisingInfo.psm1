@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech      #
 ##############################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTSettingAdvertisingInfo : WTTweakBase {
     WTSettingAdvertisingInfo() {
         $this.Name        = "SettingAdvertisingInfo"
         $this.Alias       = "AdvertisingInfo"
         $this.Description = "Advertising info (by group policy)"
-        $this.AllowedOperations = @( "Enable", "Disable" )
+        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
     }
 
     [bool]EnableTweak() {

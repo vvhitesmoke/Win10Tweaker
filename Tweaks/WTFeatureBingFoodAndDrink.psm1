@@ -4,14 +4,17 @@
 # author: Piotr Gludkowski, VillageTech      #
 ##############################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTFeatureBingFoodAndDrink : WTTweakBase {
     WTFeatureBingFoodAndDrink() {
         $this.Name        = "BingFoodAndDrink"
         $this.Alias       = "FoodAndDrink"
         $this.Description = "Food & Drink"
-        $this.AllowedOperations = @( "Remove" )
+        $this.AllowedOperations = [WTTweakActions]::Remove
+        $this.Categories        = [WTTweakCategories]::BingApp
     }
 
     [bool]RemoveTweak() {

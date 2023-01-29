@@ -4,14 +4,16 @@
 # author: Piotr Gludkowski, VillageTech     #
 #############################################
 
+Using module .\WTTweakActions.psm1
 Using module .\WTTweakBase.psm1
+Using module .\WTTweakCategories.psm1
 
 class WTSettingActivityHistory : WTTweakBase {
     WTSettingActivityHistory() {
         $this.Name        = "SettingActivityHistory"
         $this.Alias       = "ActivityHistory"
         $this.Description = "Activity History feed in Task View"
-        $this.AllowedOperations = @( "Enable", "Disable" )
+        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
     }
 
     [bool]EnableTweak() {
