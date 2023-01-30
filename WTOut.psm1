@@ -9,11 +9,11 @@ Using module .\WTConfig.psm1
 class WTOut {
     hidden static [int]$_errorsCtr = 0
 
-# Logging/diagnostics
     static [void] Initialize() {
         [WTOut]::_errorsCtr = 0
     }
 
+# Logging/diagnostics
     static [void] Print([string]$message) {
         if (! [WTConfig]::GetSilentSwitch()) {
             Write-Host $message
