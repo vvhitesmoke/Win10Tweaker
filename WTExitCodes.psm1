@@ -10,4 +10,5 @@ class WTExitCodes {
     static [int]$InvalidRecipe           = 2
     static [int]$InvalidOperation        = 3
     static [int]$OperationNotImplemented = 4
+    static [int]$OtherError              = 5
 }
