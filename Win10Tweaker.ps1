@@ -7,16 +7,17 @@
 Using module .\WTConfig.psm1
 Using module .\WTExitCodes.psm1
 Using module .\WTOut.psm1
+Using module .\WTTweakerModes.psm1
 Using module .\WTTweaksRepository.psm1
+
+Using module .\Tweaks\WTTweakBase.psm1
 
 #########################################
 
-param ([string]$recipe, [switch]$silent, [switch]$verbose, [switch]$list)
+param ([string]$tweak, [string]$operation, [string]$recipe, [string]$info, [switch]$list, [switch]$silent, [switch]$verbose)
 
-[WTConfig]::SetRecipeName($recipe.Trim())
-[WTConfig]::SetSilentSwitch($silent)
-[WTConfig]::SetVerboseSwitch($verbose)
-[WTConfig]::SetListSwitch($list)
+[WTConfig]::Initialize($tweak.Trim(), $operation.Trim(), $recipe.Trim(), $info.Trim(), $list)
+[WTOut]::Initialize($verbose, $silent)
 
 #########################################
 
@@ -38,7 +39,11 @@ Import-Module -Force -Name ./WTTweaksRepository.psm1
 #########################################
 
 function Resolve-WTRecipe {
-    [string]$recipeName = [WTConfig]::GetRecipeName()
+    [OutputType([string])]
+    param (
+        [Parameter(Mandatory)]
+        [string]$recipeName
+    )
 
     # check extension exists, add if needed
     if ($recipeName -notmatch "$RECIPES_FILE_NAME_EXTENSION$") {
@@ -46,9 +51,19 @@ function Resolve-WTRecipe {
     }
 
     # make absolute path
+    if (! [IO.Path]::IsPathRooted($recipeName)) {
+        $recipeDir  = [IO.Path]::Combine($PSScriptRoot, $RECIPES_SUB_DIR)
+        $recipeName = [IO.Path]::Combine($recipeDir, $recipeName)
+    }
+
+    [WTOut]::Trace("Recipe file to check: $recipeName`n")
 
     # check file exists
+    if (! [IO.File]::Exists($recipeName)) {
+        $recipeName = ""
+    }
 
+    $recipeName
 }
 
 function Initialize-WTTweaks {
@@ -68,8 +83,10 @@ function Initialize-WTTweaks {
 function Show-WTUsage {
     [WTOut]::Print(@"
 Usage:
-  .\Win10Tweaker.ps1 [-recipe] <recipe_name> [-verbose | -silent]
+  .\Win10Tweaker.ps1 -tweak <tweak_name> -operation <tweak_operation> [-verbose | -silent]
+  .\Win10Tweaker.ps1 -recipe <recipe_name> [-verbose | -silent]
   .\Win10Tweaker.ps1 -list [-verbose]
+  .\Win10Tweaker.ps1 -info <tweak_name_regex> [-verbose]
 
 "@)
 }
@@ -78,48 +95,66 @@ Usage:
 
 # Main
 
-[WTOut]::Initialize()
-
 [WTOut]::Print("`nWin10Tweaker v.$WT_VERSION, (c)VillageTech 2023`n")
 
-[WTOut]::Trace("Verbose: $([WTConfig]::GetVerboseSwitch())")
+[WTOut]::Trace("Mode: $([WTConfig]::GetTweakerMode())`n")
 
-if (! [WTConfig]::GetListSwitch()) {
-    [WTOut]::Trace("Recipe : $([WTConfig]::GetRecipeName())")
-    
-    if (! [bool][WTConfig]::GetRecipeName()) {
+switch ([WTConfig]::GetTweakerMode()) {
+    ([WTTweakerModes]::Tweak) {
+    }
+
+    ([WTTweakerModes]::Recipe) {
+        [WTOut]::Trace("Name: $([WTConfig]::GetName())`n")
+
+        [string]$recipeFile = (Resolve-WTRecipe "$([WTConfig]::GetName())")
+        if (! $recipeFile) {
+            [WTOut]::Error("Recipe: '$([WTConfig]::GetName())' does not exist!`n")
+            Exit [WTExitCodes]::InvalidRecipe
+        }
+
+        Initialize-WTTweaks
+
+
+    }
+
+    ([WTTweakerModes]::List) {
+        Initialize-WTTweaks
+
+        [WTOut]::Print("List of registered tweaks:")
+        [WTOut]::Print("--------------------------`n")
+
+        [WTTweaksRepository]::ShowTweaksList()
+
+        [WTOut]::Print("Total: $([WTTweaksRepository]::GetTweaksCount()) tweaks.`n")
+    }
+
+    ([WTTweakerModes]::Info) {
+        Initialize-WTTweaks
+
+        [WTOut]::Trace("Name: $([WTConfig]::GetName())`n")
+
+        [WTTweakBase[]]$tweaks = [WTTweaksRepository]::GetMatchingTweaks([WTConfig]::GetName())
+        if ($tweaks) {
+            [WTOut]::Print("Found: $($tweaks.Length) matching tweaks.`n")
+            [WTOut]::Print("List of matching tweaks:")
+            [WTOut]::Print("------------------------`n")
+
+            $tweaks.ForEach({
+                [WTTweaksRepository]::ShowTweak($_)
+            })
+        } else {
+            [WTOut]::Error("Can't find tweak matching to: '$([WTConfig]::GetName())'`n")
+        }    
+    }
+
+    default {
         Show-WTUsage
         Exit [WTExitCodes]::ArgsError
     }
-
-    Resolve-WTRecipe "$([WTConfig]::GetRecipeName())"
-    if (! [WTConfig]::GetIsValid) {
-        [WTOut]::Error("Recipe: $([WTConfig]::GetRecipeName()) does not exist!")
-        Exit [WTExitCodes]::InvalidRecipe
-    }
-}
-
-Initialize-WTTweaks
-
-if ([WTConfig]::GetListSwitch()) {
-    [WTOut]::Print("List of registered tweaks:")
-    [WTOut]::Print("--------------------------`n")
-
-    [WTTweaksRepository]::ShowTweaksList()
-
-    [WTOut]::Print("Total: $([WTTweaksRepository]::GetTweaksCount()) tweaks.`n")
-} else {
-
-
-
-
-
-
-
 }
 
 if ([WTOut]::GetErrorsCount() -gt 0) {
-    [WTOut]::Print("`nOther errors count: $([WTOut]::GetErrorsCount())`n")
+    [WTOut]::Info("Other errors count: $([WTOut]::GetErrorsCount())`n")
     Exit [WTExitCodes]::OtherError
 } else {
     Exit [WTExitCodes]::Success

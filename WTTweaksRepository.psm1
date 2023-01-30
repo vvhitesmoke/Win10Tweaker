@@ -25,23 +25,29 @@ class WTTweaksRepository {
         [WTTweaksRepository]::_modulesArray += $instance
     }
 
-    static [WTTweakBase] GetTweakInstance([string]$Name) {
-        [WTTweaksRepository]::_modulesArray.ForEach({
-            if (($_.Name = $Name) -or ($_.Alias = $Name)) {
-                return $_
-            }
+    static [WTTweakBase[]] GetMatchingTweaks([string]$Name) {
+        return [WTTweaksRepository]::_modulesArray.Where({
+            ($_.Name -match $Name) -or ($_.Alias -match $Name)
         })
+    }
 
-        return $null
+    static [WTTweakBase] GetTweak([string]$Name) {
+        return [WTTweaksRepository]::_modulesArray.Where({
+            ($_.Name -eq $Name) -or ($_.Alias -eq $Name)
+        }, 'First')[0]
+    }
+
+    static [void] ShowTweak([WTTweakBase]$tweak) {
+        [WTOut]::Print("Name: $($tweak.Name)")
+        [WTOut]::Print("Alias: $($tweak.Alias)")
+        [WTOut]::Print("Description: $($tweak.Description)")
+        [WTOut]::Print("Allowed operations: $($tweak.AllowedOperations)")
+        [WTOut]::Print("Categories: $($tweak.Categories -join ', ')`n")
     }
 
     static [void] ShowTweaksList() {
         [WTTweaksRepository]::_modulesArray.ForEach({
-            [WTOut]::Print("Name: $($_.Name)")
-            [WTOut]::Print("Alias: $($_.Alias)")
-            [WTOut]::Print("Description: $($_.Description)")
-            [WTOut]::Print("Allowed operations: $($_.AllowedOperations)")
-            [WTOut]::Print("Categories: $($_.Categories -join ', ')`n")
+            [WTTweaksRepository]::ShowTweak($_)
         })
     }
 

@@ -4,64 +4,67 @@
 # author: Piotr Gludkowski, VillageTech #
 #########################################
 
+Using module .\WTTweakerModes.psm1
+
 class WTConfig {
-    hidden static [bool]$_isValid = $false
-    hidden static [bool]$_verbose = $false
-    hidden static [bool]$_silent  = $true
-    hidden static [bool]$_list    = $false
+    hidden static [WTTweakerModes]$_mode = [WTTweakerModes]::Error
+    hidden static [string]$_name         = ""
+    hidden static [string]$_param        = ""
 
-    hidden static [string]$_recipeName     = ""
-    hidden static [string]$_recipeFileName = ""
+    static [void] Initialize([string]$tweakName, [string]$operationName, [string]$recipeName, [string]$tweakRegex, [bool]$listMode) {
+        [WTConfig]::_mode  = [WTTweakerModes]::Error
+        [WTConfig]::_name  = ""
+        [WTConfig]::_param = ""
 
-    # setters
+        if ($tweakName -and $operationName) {
 
-    static [void] SetIsValid([bool]$isValid) {
-        [WTConfig]::_isValid = $isValid
-    }
+            if ($recipeName -or $tweakRegex -or $listMode) {
+                return
+            }
 
-    static [void] SetVerboseSwitch([bool]$verbose) {
-        [WTConfig]::_verbose = $verbose
-    }
+            [WTConfig]::_mode  = [WTTweakerModes]::Tweak
+            [WTConfig]::_name  = $tweakName
+            [WTConfig]::_param = $operationName
 
-    static [void] SetSilentSwitch([bool]$silent) {
-        [WTConfig]::_silent = $silent
-    }
+        } elseif ($recipeName) {
 
-    static [void] SetListSwitch([bool]$list) {
-        [WTConfig]::_list = $list
-    }
+            if ($tweakName -or $operationName -or $tweakRegex -or $listMode) {
+                return
+            }
 
-    static [void] SetRecipeName([string]$recipeName) {
-        [WTConfig]::_recipeName = $recipeName
-    }
+            [WTConfig]::_mode = [WTTweakerModes]::Recipe
+            [WTConfig]::_name = $recipeName
 
-    static [void] SetRecipeFileName([string]$recipeFileName) {
-        [WTConfig]::_recipeFileName = $recipeFileName
+        } elseif ($tweakRegex) {
+
+            if ($tweakName -or $operationName -or $recipeName -or $listMode) {
+                return
+            }
+            
+            [WTConfig]::_mode = [WTTweakerModes]::Info
+            [WTConfig]::_name = $tweakRegex
+
+        } elseif ($listMode) {
+
+            if ($tweakName -or $operationName -or $recipeName -or $tweakName) {
+                return
+            }
+
+            [WTConfig]::_mode = [WTTweakerModes]::List        
+        }
     }
 
     # getters
 
-    static [bool] GetIsValid() {
-        return [WTConfig]::_isValid
+    static [WTTweakerModes] GetTweakerMode() {
+        return [WTConfig]::_mode
     }
 
-    static [bool] GetVerboseSwitch() {
-        return [WTConfig]::_verbose -and ! [WTConfig]::_silent
+    static [string] GetName() {
+        return [WTConfig]::_name
     }
 
-    static [bool] GetSilentSwitch() {
-        return [WTConfig]::_silent
-    }
-
-    static [bool] GetListSwitch() {
-        return [WTConfig]::_list
-    }
-
-    static [string] GetRecipeName() {
-        return [WTConfig]::_recipeName
-    }
-
-    static [string] GetRecipeFileName() {
-        return [WTConfig]::_recipeFileName
+    static [string] GetParam() {
+        return [WTConfig]::_param
     }
 }

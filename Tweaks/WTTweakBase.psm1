@@ -20,15 +20,15 @@ class WTTweakBase {
         [bool]$ret = $false
         [WTTweakActions]$action = $this.GetOperationFromString($Operation)
         switch ($action) {
-            [WTTweakActions]::Enable {
+            ([WTTweakActions]::Enable) {
                 $ret = $this.EnableFeature()
             }
 
-            [WTTweakActions]::Disable {
+            ([WTTweakActions]::Disable) {
                 $ret = $this.DisableFeature()
             }
 
-            [WTTweakActions]::Remove {
+            ([WTTweakActions]::Remove) {
                 $ret = $this.RemoveFeature()
             }
 
