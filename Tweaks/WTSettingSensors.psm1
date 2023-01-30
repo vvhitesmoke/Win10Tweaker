@@ -14,6 +14,8 @@ class WTSettingSensors : WTTweakBase {
         $this.Alias       = "Sensors"
         $this.Description = "Sensors features, such as screen auto rotation"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {

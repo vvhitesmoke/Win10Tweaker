@@ -14,6 +14,8 @@ class WTFeatureCortana : WTTweakBase {
         $this.Alias       = "Cortana"
         $this.Description = "Cortana appliaction"
         $this.AllowedOperations = [WTTweakActions]::Remove
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy
     }
 
     [bool]RemoveTweak() {

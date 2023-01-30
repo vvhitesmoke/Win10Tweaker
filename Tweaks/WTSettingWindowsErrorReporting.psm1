@@ -14,6 +14,8 @@ class WTSettingWindowsErrorReporting : WTTweakBase {
         $this.Alias       = "WindowsErrorReporting"
         $this.Description = "Windows error reporting"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {

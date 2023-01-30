@@ -14,6 +14,9 @@ class WTSettingWiFiSense : WTTweakBase {
         $this.Alias       = "WiFiSense"
         $this.Description = "Wi-Fi Sense"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy,
+                                  [WTTweakCategories]::WiFi
     }
 
     [bool]EnableTweak() {

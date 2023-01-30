@@ -14,6 +14,8 @@ class WTSettingMapUpdates : WTTweakBase {
         $this.Alias       = "MapUpdates"
         $this.Description = "Automatic Maps updates"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::WindowsApp,
+                                  [WTTweakCategories]::SpacePreservation
     }
 
     [bool]EnableTweak() {

@@ -14,6 +14,9 @@ class WTSettingSmartScreenFilter : WTTweakBase {
         $this.Alias = "SmartScreenFilter"
         $this.Description = "SmartScreen anti-phishing filter"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy,
+                                  [WTTweakCategories]::Security
     }
 
     [bool]EnableTweak() {

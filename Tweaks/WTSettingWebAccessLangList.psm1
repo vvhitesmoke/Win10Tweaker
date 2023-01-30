@@ -14,6 +14,10 @@ class WTSettingWebAccessLangList : WTTweakBase {
         $this.Alias       = "WebAccessLangList"
         $this.Description = "Website Access to Language List"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy,
+                                  [WTTweakCategories]::Security,
+                                  [WTTweakCategories]::Web
     }
 
     [bool]EnableTweak() {

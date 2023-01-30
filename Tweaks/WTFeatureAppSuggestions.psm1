@@ -14,6 +14,8 @@ class WTFeatureAppSuggestions : WTTweakBase {
         $this.Alias       = "AppSuggestions"
         $this.Description = "Application suggestions"
         $this.AllowedOperations = [WTTweakActions]::Remove
+        $this.Categories        = [WTTweakCategories]::Privacy,
+                                  [WTTweakCategories]::Security
     }
 
     [bool]RemoveTweak() {

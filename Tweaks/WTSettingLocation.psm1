@@ -14,6 +14,8 @@ class WTSettingLocation : WTTweakBase {
         $this.Alias       = "Location"
         $this.Description = "Location feature /w scripting"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {

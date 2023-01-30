@@ -12,8 +12,10 @@ class WTSettingFeedback : WTTweakBase {
     WTSettingFeedback() {
         $this.Name        = "SettingFeedback"
         $this.Alias       = "Feedback"
-        $this.Description = "Automatic Maps updates"
+        $this.Description = "Feedback informations"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {

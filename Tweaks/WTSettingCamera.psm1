@@ -14,6 +14,9 @@ class WTSettingCamera : WTTweakBase {
         $this.Alias       = "Camera"
         $this.Description = "Access to camera"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy,
+                                  [WTTweakCategories]::Security
     }
 
     [bool]EnableTweak() {

@@ -14,6 +14,8 @@ class WTSettingTailoredExperiences : WTTweakBase {
         $this.Alias       = "TailoredExperiences"
         $this.Description = "Cloud content tailored experiences with diagnostic data"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {

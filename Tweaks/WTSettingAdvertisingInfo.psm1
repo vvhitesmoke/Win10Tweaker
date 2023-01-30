@@ -14,6 +14,8 @@ class WTSettingAdvertisingInfo : WTTweakBase {
         $this.Alias       = "AdvertisingInfo"
         $this.Description = "Advertising info (by group policy)"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {

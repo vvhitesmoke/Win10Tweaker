@@ -14,6 +14,9 @@ class WTSettingBiometrics : WTTweakBase {
         $this.Alias       = "Biometrics"
         $this.Description = "Biometric features (fingerprint, Windows Hello etc.)"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy,
+                                  [WTTweakCategories]::Security
     }
 
     [bool]EnableTweak() {

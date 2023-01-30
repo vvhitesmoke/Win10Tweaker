@@ -14,6 +14,9 @@ class WTSettingMicrophone : WTTweakBase {
         $this.Alias       = "Microphone"
         $this.Description = "Access to microphone"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::System,
+                                  [WTTweakCategories]::Privacy,
+                                  [WTTweakCategories]::Security
     }
 
     [bool]EnableTweak() {

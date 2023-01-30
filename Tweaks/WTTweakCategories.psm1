@@ -9,6 +9,12 @@ enum WTTweakCategories {
     System
     Privacy
     Security
+    Performance
     BingApp
     WindowsApp
+    SSDProtection
+    SpacePreservation
+    WiFi
+    UWP
+    Web
 }

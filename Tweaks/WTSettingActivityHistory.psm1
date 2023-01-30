@@ -14,6 +14,8 @@ class WTSettingActivityHistory : WTTweakBase {
         $this.Alias       = "ActivityHistory"
         $this.Description = "Activity History feed in Task View"
         $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.Categories        = [WTTweakCategories]::Security,
+                                  [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {
