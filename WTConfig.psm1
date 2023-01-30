@@ -8,8 +8,8 @@ Using module .\WTTweakerModes.psm1
 
 class WTConfig {
     hidden static [WTTweakerModes]$_mode = [WTTweakerModes]::Error
-    hidden static [string]$_name         = ""
-    hidden static [string]$_param        = ""
+    hidden static [string]$_name  = ""
+    hidden static [string]$_param = ""
 
     static [void] Initialize([string]$tweakName, [string]$operationName, [string]$recipeName, [string]$tweakRegex, [bool]$listMode) {
         [WTConfig]::_mode  = [WTTweakerModes]::Error
