@@ -108,12 +108,21 @@ if ([WTConfig]::GetListSwitch()) {
     [WTTweaksRepository]::ShowTweaksList()
 
     [WTOut]::Print("Total: $([WTTweaksRepository]::GetTweaksCount()) tweaks.`n")
-    Exit [WTExitCodes]::Success
+} else {
+
+
+
+
+
+
+
 }
 
-
-
-
-Exit [WTExitCodes]::Success
+if ([WTOut]::GetErrorsCount() -gt 0) {
+    [WTOut]::Print("`nOther errors count: $([WTOut]::GetErrorsCount())`n")
+    Exit [WTExitCodes]::OtherError
+} else {
+    Exit [WTExitCodes]::Success
+}
 
 # EOF
