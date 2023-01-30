@@ -41,7 +41,7 @@ class WTTweaksRepository {
             [WTOut]::Print("Alias: $($_.Alias)")
             [WTOut]::Print("Description: $($_.Description)")
             [WTOut]::Print("Allowed operations: $($_.AllowedOperations)")
-            [WTOut]::Print("Categories: $($_.Categories)`n")
+            [WTOut]::Print("Categories: $($_.Categories -join ', ')`n")
         })
     }
 
