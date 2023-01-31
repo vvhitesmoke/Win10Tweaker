@@ -3,15 +3,15 @@
 # RecipeAuthor = 'Piotr Gludkowski, VillageTech'
 
 # Settings
-    AccesibilityKeys : Disable
+#    AccesibilityKeys : Disable
 
 # Windows applications
     #AlarmsAndClock : Remove
     #Camera         : Remove
     #Communications : Remove
     Cortana         : Remove
-    GetHelp         : Remove
-    GetStarted      : Remove
+#    GetHelp         : Remove
+#    GetStarted      : Remove
     #GetOffice      : Remove
     #GetSkype       : Remove
     #Maps           : Remove
@@ -26,11 +26,11 @@
     #People         : Remove
     #Photos         : Remove
     #PlexServer     : Remove
-    Reader          : Remove
+#    Reader          : Remove
     #SoundRecorder  : Remove
-    Spotify         : Remove
-    Sway            : Remove
-    Twitter         : Remove
+#    Spotify         : Remove
+#    Sway            : Remove
+#    Twitter         : Remove
     Viber           : Remove
     #WindowsStore   : Remove
     #WindowsPhone   : Remove
