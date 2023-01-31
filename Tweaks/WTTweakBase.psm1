@@ -16,24 +16,27 @@ class WTTweakBase {
     [WTTweakActions]$AllowedOperations = [WTTweakActions]::None
     [WTTweakCategories[]]$Categories = [WTTweakCategories]::Unknown
     
-    [bool] SwitchFeature([string]$Operation) {
+    [bool] PerformTweakOperation([string]$Operation) {
         [bool]$ret = $false
         [WTTweakActions]$action = $this.GetOperationFromString($Operation)
+
+        [WTOut]::Trace("Operation: '$action'")
+
         switch ($action) {
             ([WTTweakActions]::Enable) {
-                $ret = $this.EnableFeature()
+                $ret = $this.EnableTweak()
             }
 
             ([WTTweakActions]::Disable) {
-                $ret = $this.DisableFeature()
+                $ret = $this.DisableTweak()
             }
 
             ([WTTweakActions]::Remove) {
-                $ret = $this.RemoveFeature()
+                $ret = $this.RemoveTweak()
             }
 
             default {
-                [WTOut]::Error("Invalid operation: $Operation")
+                [WTOut]::Error("Invalid operation: '$Operation'")
             }
         }
 
@@ -56,11 +59,12 @@ class WTTweakBase {
     }
 
     hidden [WTTweakActions] GetOperationFromString([string]$operationName) {
-        [WTTweakActions]$operation = [WTTweakActions]::None
-        if (([string[]]$this.AllowedOperations).Contains($operationName)) {
-            $operation = [WTTWeakActions]$operationName
+        [WTTweakActions]$action = [WTTweakActions]::None
+        [string[]]$operations = (([string]$this.AllowedOperations) -split ',').Trim()
+        if ($operationName -in $operations) {
+            $action = [WTTWeakActions]$operationName
         }
 
-        return $operation
+        return $action
     }
 }
