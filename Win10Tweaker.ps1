@@ -66,6 +66,94 @@ function Resolve-WTRecipe {
     $recipeName
 }
 
+function Use-WTRecipe {
+    [OutputType([bool])]
+    param (
+        [Parameter(Mandatory)]
+        [string]$recipeFile
+    )
+
+    [WTOut]::Info("Processing recipe file: '$recipeFile'...`n")
+
+    [bool]$result  = $true
+    [int]$lineCtr  = 0
+    [int]$tweakCtr = 0
+
+    foreach($line in Get-Content $recipeFile) {
+        $lineCtr++
+
+        # remove comments
+        [string[]]$items = $line -split '#'
+        [string]$tweak = $items[0].Trim()
+
+        # ignore empty or comment-only lines
+        if (! $tweak) {
+            continue
+        }
+
+        [WTOut]::Trace("Tweak: $tweak")
+
+        $items = ($tweak -split ':').Trim()
+        if ($items.Count -ne 2) {
+            [WTOut]::Error("Invalid line format: [$lineCtr] '$line'`n")
+            $result = $false
+            break
+        }
+
+        [WTOut]::Trace("Tweak items: $items`n")
+
+        [string]$tweakName      = $items[0]
+        [string]$tweakOperation = $items[1]
+
+        if (! $tweakName) {
+            [WTOut]::Error("Tweak name can't be empty, line: [$lineCtr] '$line'`n")
+            $result = $false
+            break
+        }
+
+        if (! $tweakOperation) {
+            [WTOut]::Error("Tweak operation can't be empty, line: [$lineCtr] '$line'`n")
+            $result = $false
+            break
+        }
+
+        $result = (Use-WTTweak $tweakName $tweakOperation)
+        if (! $result) {
+            break
+        }
+    }
+
+    $result
+}
+
+function Use-WTTweak {
+    [OutputType([bool])]
+    param (
+        [Parameter(Mandatory)]
+        [string]$tweakName,
+
+        [Parameter(Mandatory)]
+        [string]$tweakOperation
+    )
+
+    [bool]$result = $true
+
+    [WTTweakBase]$tweak = [WTTweaksRepository]::GetTweak($tweakName)
+    if ($tweak) {
+        [bool]$tweakResult = $tweak.PerformTweakOperation($tweakOperation)
+        if ($tweakResult) {
+            [WTOut]::Info("Operation: '$tweakOperation' on tweak: '$tweakName' succeeded.`n")
+        } else {
+            [WTOut]::Warning("Operation: '$tweakOperation' on tweak: '$tweakName' failed!`n")
+        }
+    } else {
+        [WTOut]::Error("Can't find tweak: '$([WTConfig]::GetName())'`n")
+        $result = $false
+    }    
+
+    $result
+}
+
 function Initialize-WTTweaks {
     [WTOut]::Print("Registering tweaks...")
 
@@ -83,7 +171,7 @@ function Initialize-WTTweaks {
 function Show-WTUsage {
     [WTOut]::Print(@"
 Usage:
-  .\Win10Tweaker.ps1 -tweak <tweak_name> -operation <tweak_operation> [-verbose | -silent]
+  .\Win10Tweaker.ps1 [-tweak] <tweak_name> [-operation] <tweak_operation> [-verbose | -silent]
   .\Win10Tweaker.ps1 -recipe <recipe_name> [-verbose | -silent]
   .\Win10Tweaker.ps1 -list [-verbose]
   .\Win10Tweaker.ps1 -info <tweak_name_regex> [-verbose]
@@ -101,6 +189,12 @@ Usage:
 
 switch ([WTConfig]::GetTweakerMode()) {
     ([WTTweakerModes]::Tweak) {
+        Initialize-WTTweaks
+
+        [WTOut]::Trace("Name: '$([WTConfig]::GetName())'")
+        [WTOut]::Trace("Operation: '$([WTConfig]::GetParam())'`n")
+
+        Use-WTTweak ([WTConfig]::GetName()) ([WTConfig]::GetParam())
     }
 
     ([WTTweakerModes]::Recipe) {
@@ -114,7 +208,7 @@ switch ([WTConfig]::GetTweakerMode()) {
 
         Initialize-WTTweaks
 
-
+        Use-WTRecipe $recipeFile
     }
 
     ([WTTweakerModes]::List) {
@@ -153,11 +247,21 @@ switch ([WTConfig]::GetTweakerMode()) {
     }
 }
 
-if ([WTOut]::GetErrorsCount() -gt 0) {
-    [WTOut]::Info("Other errors count: $([WTOut]::GetErrorsCount())`n")
-    Exit [WTExitCodes]::OtherError
-} else {
-    Exit [WTExitCodes]::Success
+[int]$warningsCount = [WTOut]::GetWarningsCount()
+[int]$errorsCount   = [WTOut]::GetErrorsCount()
+[int]$exitCode      = [WTExitCodes]::Success
+
+if ($errorsCount -gt 0) {
+    $exitCode = [WTExitCodes]::OtherError
+    if ($warningsCount -gt 0) {
+        [WTOut]::Info("Errors count: $errorsCount, warnings count: $warningsCount`n")
+    } else {
+        [WTOut]::Info("Errors count: $errorsCount`n")
+    }
+} elseif ($warningsCount -gt 0) {
+    [WTOut]::Info("Warnings count: $warningsCount`n")
 }
+
+Exit $exitCode
 
 # EOF

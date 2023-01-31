@@ -8,16 +8,18 @@ class WTOut {
     hidden static [bool]$_verbose = $false
     hidden static [bool]$_silent  = $false
 
-    hidden static [int]$_errorsCtr = 0
+    hidden static [int]$_errorsCtr   = 0
+    hidden static [int]$_warningsCtr = 0
 
     static [void] Initialize([bool]$verbose, [bool]$silent) {
         if ($silent) {
             $verbose = $false
         }
 
-        [WTOut]::_verbose   = $verbose
-        [WTOut]::_silent    = $silent
-        [WTOut]::_errorsCtr = 0
+        [WTOut]::_verbose     = $verbose
+        [WTOut]::_silent      = $silent
+        [WTOut]::_errorsCtr   = 0
+        [WTOut]::_warningsCtr = 0
     }
 
 # Logging/diagnostics
@@ -41,6 +43,13 @@ class WTOut {
         }
     }
 
+    static [void] Warning([string]$message) {
+        [WTOut]::_warningsCtr++
+        if (! [WTOut]::_silent) {
+            Write-Host "Warning #$([WTOut]::_warningsCtr): $message" -ForegroundColor Yellow
+        }
+    }
+
     static [void] Info([string]$message) {
         if (! [WTOut]::_silent) {
             Write-Host "Info: $message" -ForegroundColor Green
@@ -55,5 +64,9 @@ class WTOut {
 
     static [int] GetErrorsCount() {
         return [WTOut]::_errorsCtr
+    }
+
+    static [int] GetWarningsCount() {
+        return [WTOut]::_warningsCtr
     }
 }
