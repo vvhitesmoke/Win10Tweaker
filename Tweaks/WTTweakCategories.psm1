@@ -6,6 +6,7 @@
 
 enum WTTweakCategories {
     Unknown
+    Test
     System
     Privacy
     Security
