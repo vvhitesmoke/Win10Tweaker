@@ -31,7 +31,7 @@
 #    Spotify         : Remove
 #    Sway            : Remove
 #    Twitter         : Remove
-    Viber           : Remove
+#    Viber           : Remove
     #WindowsStore   : Remove
     #WindowsPhone   : Remove
     #YourPhone      : Remove
@@ -39,31 +39,31 @@
     #SolitaireCollection : Remove
 
 # Bing applications
-    Finance          : Remove
-    FoodAndDrink     : Remove
-    HealthAndFitness : Remove
-    News             : Remove
-    Sports           : Remove
-    Travel           : Remove
+#    Finance          : Remove
+#    FoodAndDrink     : Remove
+#    HealthAndFitness : Remove
+#    News             : Remove
+#    Sports           : Remove
+#    Travel           : Remove
     #Weather         : Remove
     
     Test : Disable
     Test : Remove
 
     #dupa : blada :
-    dupa
+    #dupa
     #dupa :
     #:dupa
 
 
 
 # Zune applications
-    GrooveMusic : Remove
-    MoviesAndTV : Remove
+#    GrooveMusic : Remove
+#    MoviesAndTV : Remove
 
 # XBox
-    XBoxApp : Remove
-    XBoxBar : Remove
+#    XBoxApp : Remove
+#    XBoxBar : Remove
 
 #disable auto defragmentation!!!!
 #disable hibernation!!!!
