@@ -138,18 +138,23 @@ function Use-WTTweak {
 
     [bool]$result = $true
 
-    [WTTweakBase]$tweak = [WTTweaksRepository]::GetTweak($tweakName)
-    if ($tweak) {
-        [bool]$tweakResult = $tweak.PerformTweakOperation($tweakOperation)
-        if ($tweakResult) {
-            [WTOut]::Info("Operation: '$tweakOperation' on tweak: '$tweakName' succeeded.`n")
+    if (Test-IsAdmin) {
+        [WTTweakBase]$tweak = [WTTweaksRepository]::GetTweak($tweakName)
+        if ($tweak) {
+            [bool]$tweakResult = $tweak.PerformTweakOperation($tweakOperation)
+            if ($tweakResult) {
+                [WTOut]::Info("Operation: '$tweakOperation' on tweak: '$tweakName' succeeded.`n")
+            } else {
+                [WTOut]::Warning("Operation: '$tweakOperation' on tweak: '$tweakName' failed!`n")
+            }
         } else {
-            [WTOut]::Warning("Operation: '$tweakOperation' on tweak: '$tweakName' failed!`n")
-        }
+            [WTOut]::Error("Can't find tweak: '$tweakName'`n")
+            $result = $false
+        }    
     } else {
-        [WTOut]::Error("Can't find tweak: '$([WTConfig]::GetName())'`n")
+        [WTOut]::Error("Executing requires admin rights!`n")
         $result = $false
-    }    
+    }
 
     $result
 }
@@ -166,6 +171,12 @@ function Initialize-WTTweaks {
     }
 
     [WTOut]::Print("Registered: $([WTTweaksRepository]::GetTweaksCount()) tweaks.`n")
+}
+
+function Test-IsAdmin {
+    [Security.Principal.WindowsPrincipal]$principal = [Security.Principal.WindowsIdentity]::GetCurrent()
+
+	$principal.IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")
 }
 
 function Show-WTUsage {
@@ -187,6 +198,8 @@ Usage:
 
 [WTOut]::Trace("Mode: $([WTConfig]::GetTweakerMode())`n")
 
+[int]$exitCode = [WTExitCodes]::Success
+
 switch ([WTConfig]::GetTweakerMode()) {
     ([WTTweakerModes]::Tweak) {
         Initialize-WTTweaks
@@ -194,7 +207,10 @@ switch ([WTConfig]::GetTweakerMode()) {
         [WTOut]::Trace("Name: '$([WTConfig]::GetName())'")
         [WTOut]::Trace("Operation: '$([WTConfig]::GetParam())'`n")
 
-        Use-WTTweak ([WTConfig]::GetName()) ([WTConfig]::GetParam())
+        [bool]$result = (Use-WTTweak ([WTConfig]::GetName()) ([WTConfig]::GetParam()))
+        if (! $result) {
+            $exitCode = [WTExitCodes]::TweakError
+        }
     }
 
     ([WTTweakerModes]::Recipe) {
@@ -208,7 +224,10 @@ switch ([WTConfig]::GetTweakerMode()) {
 
         Initialize-WTTweaks
 
-        Use-WTRecipe $recipeFile
+        [bool]$result = (Use-WTRecipe $recipeFile)
+        if (! $result) {
+            $exitCode = [WTExitCodes]::RecipeError
+        }
     }
 
     ([WTTweakerModes]::List) {
@@ -249,18 +268,26 @@ switch ([WTConfig]::GetTweakerMode()) {
 
 [int]$warningsCount = [WTOut]::GetWarningsCount()
 [int]$errorsCount   = [WTOut]::GetErrorsCount()
-[int]$exitCode      = [WTExitCodes]::Success
 
 if ($errorsCount -gt 0) {
-    $exitCode = [WTExitCodes]::OtherError
+    
+    if ($exitCode -eq [WTExitCodes]::Success) {
+        $exitCode = [WTExitCodes]::OtherError
+    }
+    
     if ($warningsCount -gt 0) {
         [WTOut]::Info("Errors count: $errorsCount, warnings count: $warningsCount`n")
     } else {
         [WTOut]::Info("Errors count: $errorsCount`n")
     }
+
 } elseif ($warningsCount -gt 0) {
+
     [WTOut]::Info("Warnings count: $warningsCount`n")
+
 }
+
+[WTOut]::Trace("ExitCode: $exitCode`n")
 
 Exit $exitCode
 
