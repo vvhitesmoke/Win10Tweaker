@@ -7,11 +7,10 @@
 class WTExitCodes {
     static [int]$Success                 = 0
     static [int]$ArgsError               = 1
-    static [int]$InvalidRecipe           = 2
-    static [int]$InvalidOperation        = 3
-    static [int]$OperationNotImplemented = 4
-    static [int]$RecipeError             = 10
-    static [int]$TweakError              = 20
-    static [int]$NotAdmin                = 100
-    static [int]$OtherError              = 200
+    static [int]$InsufficientRights      = 2
+    static [int]$RecipeNotFound          = 11
+    static [int]$RecipeFormatError       = 12
+    static [int]$TweakNotFound           = 13
+    static [int]$InvalidOperation        = 14
+    static [int]$OtherError              = 100
 }

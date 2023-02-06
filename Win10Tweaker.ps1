@@ -67,7 +67,7 @@ function Resolve-WTRecipe {
 }
 
 function Use-WTRecipe {
-    [OutputType([bool])]
+    [OutputType([int])]
     param (
         [Parameter(Mandatory)]
         [string]$recipeFile
@@ -75,7 +75,7 @@ function Use-WTRecipe {
 
     [WTOut]::Info("Processing recipe file: '$recipeFile'...`n")
 
-    [bool]$result  = $true
+    [int]$result   = [WTExitCodes]::Success
     [int]$lineCtr  = 0
     [int]$tweakCtr = 0
 
@@ -96,7 +96,7 @@ function Use-WTRecipe {
         $items = ($tweak -split ':').Trim()
         if ($items.Count -ne 2) {
             [WTOut]::Error("Invalid line format: [$lineCtr] '$line'`n")
-            $result = $false
+            $result = [WTExitCodes]::RecipeFormatError
             break
         }
 
@@ -107,13 +107,13 @@ function Use-WTRecipe {
 
         if (! $tweakName) {
             [WTOut]::Error("Tweak name can't be empty, line: [$lineCtr] '$line'`n")
-            $result = $false
+            $result = [WTExitCodes]::RecipeFormatError
             break
         }
 
         if (! $tweakOperation) {
             [WTOut]::Error("Tweak operation can't be empty, line: [$lineCtr] '$line'`n")
-            $result = $false
+            $result = [WTExitCodes]::InvalidOperation
             break
         }
 
@@ -127,7 +127,7 @@ function Use-WTRecipe {
 }
 
 function Use-WTTweak {
-    [OutputType([bool])]
+    [OutputType([int])]
     param (
         [Parameter(Mandatory)]
         [string]$tweakName,
@@ -136,7 +136,7 @@ function Use-WTTweak {
         [string]$tweakOperation
     )
 
-    [bool]$result = $true
+    [int]$result = [WTExitCodes]::Success
 
     if (Test-IsAdmin) {
         [WTTweakBase]$tweak = [WTTweaksRepository]::GetTweak($tweakName)
@@ -149,11 +149,11 @@ function Use-WTTweak {
             }
         } else {
             [WTOut]::Error("Can't find tweak: '$tweakName'`n")
-            $result = $false
+            $result = [WTExitCodes]::TweakNotFound
         }    
     } else {
         [WTOut]::Error("Executing requires admin rights!`n")
-        $result = $false
+        $result = [WTExitCodes]::InsufficientRights
     }
 
     $result
@@ -207,10 +207,7 @@ switch ([WTConfig]::GetTweakerMode()) {
         [WTOut]::Trace("Name: '$([WTConfig]::GetName())'")
         [WTOut]::Trace("Operation: '$([WTConfig]::GetParam())'`n")
 
-        [bool]$result = (Use-WTTweak ([WTConfig]::GetName()) ([WTConfig]::GetParam()))
-        if (! $result) {
-            $exitCode = [WTExitCodes]::TweakError
-        }
+        $exitCode = (Use-WTTweak ([WTConfig]::GetName()) ([WTConfig]::GetParam()))
     }
 
     ([WTTweakerModes]::Recipe) {
@@ -219,15 +216,12 @@ switch ([WTConfig]::GetTweakerMode()) {
         [string]$recipeFile = (Resolve-WTRecipe "$([WTConfig]::GetName())")
         if (! $recipeFile) {
             [WTOut]::Error("Recipe: '$([WTConfig]::GetName())' does not exist!`n")
-            Exit [WTExitCodes]::InvalidRecipe
+            Exit [WTExitCodes]::RecipeNotFound
         }
 
         Initialize-WTTweaks
 
-        [bool]$result = (Use-WTRecipe $recipeFile)
-        if (! $result) {
-            $exitCode = [WTExitCodes]::RecipeError
-        }
+        $exitCode = (Use-WTRecipe $recipeFile)
     }
 
     ([WTTweakerModes]::List) {
@@ -257,6 +251,7 @@ switch ([WTConfig]::GetTweakerMode()) {
             })
         } else {
             [WTOut]::Error("Can't find tweak matching to: '$([WTConfig]::GetName())'`n")
+            $exitCode = [WTExitCodes]::TweakNotFound
         }    
     }
 
