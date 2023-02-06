@@ -14,7 +14,17 @@ Using module .\Tweaks\WTTweakBase.psm1
 
 #########################################
 
-param ([string]$tweak, [string]$operation, [string]$recipe, [string]$info, [switch]$list, [switch]$silent, [switch]$verbose)
+# Script parameters
+
+param (
+    [string]$tweak,
+    [string]$operation,
+    [string]$recipe,
+    [string]$info,
+    [switch]$list,
+    [switch]$silent,
+    [switch]$verbose
+)
 
 [WTConfig]::Initialize($tweak.Trim(), $operation.Trim(), $recipe.Trim(), $info.Trim(), $list)
 [WTOut]::Initialize($verbose, $silent)
