@@ -201,8 +201,8 @@ Usage:
 }
 
 #########################################
-
-# Main
+#                M A I N                #
+#########################################
 
 [WTOut]::Print("`nWin10Tweaker v.$WT_VERSION, (c)VillageTech 2023`n")
 
@@ -211,6 +211,7 @@ Usage:
 [int]$exitCode = [WTExitCodes]::Success
 
 switch ([WTConfig]::GetTweakerMode()) {
+    # -tweak
     ([WTTweakerModes]::Tweak) {
         Initialize-WTTweaks
 
@@ -220,6 +221,7 @@ switch ([WTConfig]::GetTweakerMode()) {
         $exitCode = (Use-WTTweak ([WTConfig]::GetName()) ([WTConfig]::GetParam()))
     }
 
+    # -recipe
     ([WTTweakerModes]::Recipe) {
         [WTOut]::Trace("Name: $([WTConfig]::GetName())`n")
 
@@ -234,6 +236,7 @@ switch ([WTConfig]::GetTweakerMode()) {
         $exitCode = (Use-WTRecipe $recipeFile)
     }
 
+    # -list
     ([WTTweakerModes]::List) {
         Initialize-WTTweaks
 
@@ -245,6 +248,7 @@ switch ([WTConfig]::GetTweakerMode()) {
         [WTOut]::Print("Total: $([WTTweaksRepository]::GetTweaksCount()) tweaks.`n")
     }
 
+    # -info
     ([WTTweakerModes]::Info) {
         Initialize-WTTweaks
 
@@ -265,6 +269,7 @@ switch ([WTConfig]::GetTweakerMode()) {
         }    
     }
 
+    # arguments error
     default {
         Show-WTUsage
         Exit [WTExitCodes]::ArgsError
