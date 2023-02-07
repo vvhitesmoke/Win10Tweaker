@@ -58,6 +58,16 @@ class WTTweakBase {
         return $false
     }
 
+    static [void] RemoveAppxPackage([string]$package) {
+        Get-AppxPackage -AllUsers $package | Remove-AppxPackage
+    }
+
+    static [void] CreateRegistryHive([string]$hive) {
+    	if (!(Test-Path $hive)) {
+		    New-Item -Path $hive -Force | Out-Null
+    	}
+    }
+
     hidden [WTTweakActions] GetOperationFromString([string]$operationName) {
         [WTTweakActions]$action = [WTTweakActions]::None
         [string[]]$operations = (([string]$this.AllowedOperations) -split ',').Trim()
