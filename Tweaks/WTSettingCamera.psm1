@@ -13,7 +13,8 @@ class WTSettingCamera : WTTweakBase {
         $this.Name        = "SettingCamera"
         $this.Alias       = "Camera"
         $this.Description = "Access to camera"
-        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.AllowedOperations = [WTTweakActions]::Enable +
+                                  [WTTweakActions]::Disable
         $this.Categories        = [WTTweakCategories]::System,
                                   [WTTweakCategories]::Privacy,
                                   [WTTweakCategories]::Security
@@ -21,18 +22,16 @@ class WTSettingCamera : WTTweakBase {
 
     [bool]EnableTweak() {
         # Camera
-    	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" -Name "LetAppsAccessCamera" -ErrorAction SilentlyContinue
-        
+        Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" -Name "LetAppsAccessCamera" -ErrorAction SilentlyContinue
+
         return $true
     }
 
     [bool]DisableTweak() {
         # Camera
-    	if (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy")) {
-	    	New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" -Force | Out-Null
-    	}
-	    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" -Name "LetAppsAccessCamera" -Type DWord -Value 2
-        
+    	[WTTweakBase]::CreateRegistryHive("HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy")
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" -Name "LetAppsAccessCamera" -Type DWord -Value 2
+
         return $true
     }
 }

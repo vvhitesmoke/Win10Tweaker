@@ -13,7 +13,8 @@ class WTSettingBiometrics : WTTweakBase {
         $this.Name        = "SettingBiometrics"
         $this.Alias       = "Biometrics"
         $this.Description = "Biometric features (fingerprint, Windows Hello etc.)"
-        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.AllowedOperations = [WTTweakActions]::Enable +
+                                  [WTTweakActions]::Disable
         $this.Categories        = [WTTweakCategories]::System,
                                   [WTTweakCategories]::Privacy,
                                   [WTTweakCategories]::Security
@@ -21,18 +22,16 @@ class WTSettingBiometrics : WTTweakBase {
 
     [bool]EnableTweak() {
         # Biometrics
-    	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Biometrics" -Name "Enabled" -ErrorAction SilentlyContinue
-        
+        Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Biometrics" -Name "Enabled" -ErrorAction SilentlyContinue
+
         return $true
     }
 
     [bool]DisableTweak() {
         # Biometrics
-    	if (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Biometrics")) {
-	    	New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Biometrics" -Force | Out-Null
-    	}
-	    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Biometrics" -Name "Enabled" -Type DWord -Value 0
-        
+    	[WTTweakBase]::CreateRegistryHive("HKLM:\SOFTWARE\Policies\Microsoft\Biometrics")
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Biometrics" -Name "Enabled" -Type DWord -Value 0
+
         return $true
     }
 }

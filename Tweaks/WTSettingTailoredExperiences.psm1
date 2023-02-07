@@ -13,25 +13,24 @@ class WTSettingTailoredExperiences : WTTweakBase {
         $this.Name        = "SettingTailoredExperiences"
         $this.Alias       = "TailoredExperiences"
         $this.Description = "Cloud content tailored experiences with diagnostic data"
-        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.AllowedOperations = [WTTweakActions]::Enable +
+                                  [WTTweakActions]::Disable
         $this.Categories        = [WTTweakCategories]::System,
                                   [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {
         # TailoredExperiences
-    	Remove-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
-        
+        Remove-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
+
         return $true
     }
 
     [bool]DisableTweak() {
         # TailoredExperiences
-    	if (!(Test-Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent")) {
-		    New-Item -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Force | Out-Null
-    	}
-	    Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
-        
+    	[WTTweakBase]::CreateRegistryHive("HKCU:\Software\Policies\Microsoft\Windows\CloudContent")
+        Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
+
         return $true
     }
 }

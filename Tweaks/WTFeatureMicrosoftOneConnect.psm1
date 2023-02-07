@@ -14,11 +14,13 @@ class WTFeatureMicrosoftOneConnect : WTTweakBase {
         $this.Alias       = "OneConnect"
         $this.Description = "Microsoft OneConnect"
         $this.AllowedOperations = [WTTweakActions]::Remove
+        $this.Categories        = [WTTweakCategories]::WindowsApp
     }
 
     [bool]RemoveTweak() {
         # MicrosoftOneConnect
-        Get-AppxPackage -AllUsers Microsoft.OneConnect | Remove-AppxPackage
+        [WTTweakBase]::RemoveAppxPackage("Microsoft.OneConnect")
+
         return $true
     }
 }

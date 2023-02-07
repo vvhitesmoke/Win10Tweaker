@@ -13,22 +13,23 @@ class WTSettingMapUpdates : WTTweakBase {
         $this.Name        = "SettingMapUpdates"
         $this.Alias       = "MapUpdates"
         $this.Description = "Automatic Maps updates"
-        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.AllowedOperations = [WTTweakActions]::Enable +
+                                  [WTTweakActions]::Disable
         $this.Categories        = [WTTweakCategories]::WindowsApp,
                                   [WTTweakCategories]::SpacePreservation
     }
 
     [bool]EnableTweak() {
         # MapUpdates
-    	Remove-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -ErrorAction SilentlyContinue
-        
+        Remove-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -ErrorAction SilentlyContinue
+
         return $true
     }
 
     [bool]DisableTweak() {
         # MapUpdates
-    	Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
-        
+        Set-ItemProperty -Path "HKLM:\SYSTEM\Maps" -Name "AutoUpdateEnabled" -Type DWord -Value 0
+
         return $true
     }
 }

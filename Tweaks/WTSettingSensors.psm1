@@ -13,26 +13,25 @@ class WTSettingSensors : WTTweakBase {
         $this.Name        = "SettingSensors"
         $this.Alias       = "Sensors"
         $this.Description = "Sensors features, such as screen auto rotation"
-        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.AllowedOperations = [WTTweakActions]::Enable +
+                                  [WTTweakActions]::Disable
         $this.Categories        = [WTTweakCategories]::System,
                                   [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {
         # Sensors
-    	Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" -Name "DisableSensors" -ErrorAction SilentlyContinue
-        
+        Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" -Name "DisableSensors" -ErrorAction SilentlyContinue
+
         return $true
     }
 
     [bool]DisableTweak() {
         # Sensors
-    	if (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors")) {
-	    	New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" -Force | Out-Null
-    	}
-	    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" -Name "DisableLocation" -Type DWord -Value 1
-    	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" -Name "DisableLocationScripting" -Type DWord -Value 1
-        
+        [WTTweakBase]::CreateRegistryHive("HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors")
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" -Name "DisableLocation" -Type DWord -Value 1
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" -Name "DisableLocationScripting" -Type DWord -Value 1
+
         return $true
     }
 }

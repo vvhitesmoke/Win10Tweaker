@@ -19,7 +19,8 @@ class WTFeatureBingFoodAndDrink : WTTweakBase {
 
     [bool]RemoveTweak() {
         # BingFoodAndDrink
-        Get-AppxPackage -AllUsers Microsoft.BingFoodAndDrink | Remove-AppxPackage
+        [WTTweakBase]::RemoveAppxPackage("Microsoft.BingFoodAndDrink")
+
         return $true
     }
 }

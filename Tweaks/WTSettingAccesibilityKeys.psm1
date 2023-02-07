@@ -13,7 +13,8 @@ class WTSettingAccesibilityKeys : WTTweakBase {
         $this.Name        = "SettingAccesibilityKeys"
         $this.Alias       = "AccesibilityKeys"
         $this.Description = "Accesibility keys"
-        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.AllowedOperations = [WTTweakActions]::Enable + 
+                                  [WTTweakActions]::Disable
     }
 
     [bool]EnableTweak() {

@@ -20,33 +20,25 @@ class WTFeatureCortana : WTTweakBase {
 
     [bool]RemoveTweak() {
         # Cortana
-    	if (!(Test-Path "HKCU:\Software\Microsoft\Personalization\Settings")) {
-	    	New-Item -Path "HKCU:\Software\Microsoft\Personalization\Settings" -Force | Out-Null
-    	}
-	    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Personalization\Settings" -Name "AcceptedPrivacyPolicy" -Type DWord -Value 0
+        [WTTweakBase]::CreateRegistryHive("HKCU:\Software\Microsoft\Personalization\Settings")
+        Set-ItemProperty -Path "HKCU:\Software\Microsoft\Personalization\Settings" -Name "AcceptedPrivacyPolicy" -Type DWord -Value 0
 
-    	if (!(Test-Path "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore")) {
-	    	New-Item -Path "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore" -Force | Out-Null
-    	}
-	    Set-ItemProperty -Path "HKCU:\Software\Microsoft\InputPersonalization" -Name "RestrictImplicitTextCollection" -Type DWord -Value 1
-    	Set-ItemProperty -Path "HKCU:\Software\Microsoft\InputPersonalization" -Name "RestrictImplicitInkCollection" -Type DWord -Value 1
-	    Set-ItemProperty -Path "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore" -Name "HarvestContacts" -Type DWord -Value 0
+        [WTTweakBase]::CreateRegistryHive("HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore")
+        Set-ItemProperty -Path "HKCU:\Software\Microsoft\InputPersonalization" -Name "RestrictImplicitTextCollection" -Type DWord -Value 1
+        Set-ItemProperty -Path "HKCU:\Software\Microsoft\InputPersonalization" -Name "RestrictImplicitInkCollection" -Type DWord -Value 1
+        Set-ItemProperty -Path "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore" -Name "HarvestContacts" -Type DWord -Value 0
 
-    	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
+        Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowCortanaButton" -Type DWord -Value 0
 
-	    Set-ItemProperty -Path "HKLM:\Software\Microsoft\PolicyManager\default\Experience\AllowCortana" -Name "Value" -Type DWord -Value 0
+        Set-ItemProperty -Path "HKLM:\Software\Microsoft\PolicyManager\default\Experience\AllowCortana" -Name "Value" -Type DWord -Value 0
 
-    	if (!(Test-Path "HKLM:\Software\Policies\Microsoft\Windows\Windows Search")) {
-	    	New-Item -Path "HKLM:\Software\Policies\Microsoft\Windows\Windows Search" -Force | Out-Null
-    	}
-	    Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows\Windows Search" -Name "AllowCortana" -Type DWord -Value 0
+        [WTTweakBase]::CreateRegistryHive("HKLM:\Software\Policies\Microsoft\Windows\Windows Search")
+        Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows\Windows Search" -Name "AllowCortana" -Type DWord -Value 0
 
-    	if (!(Test-Path "HKLM:\Software\Policies\Microsoft\InputPersonalization")) {
-	    	New-Item -Path "HKLM:\Software\Policies\Microsoft\InputPersonalization" -Force | Out-Null
-    	}
-	    Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\InputPersonalization" -Name "AllowInputPersonalization" -Type DWord -Value 0
+        [WTTweakBase]::CreateRegistryHive("HKLM:\Software\Policies\Microsoft\InputPersonalization")
+        Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\InputPersonalization" -Name "AllowInputPersonalization" -Type DWord -Value 0
 
-        Get-AppxPackage -AllUsers Microsoft.549981C3F5F10 | Remove-AppxPackage
+        [WTTweakBase]::RemoveAppxPackage("Microsoft.549981C3F5F10")
 
         return $true
     }

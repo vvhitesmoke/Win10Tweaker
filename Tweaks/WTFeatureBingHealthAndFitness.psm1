@@ -19,7 +19,8 @@ class WTFeatureBingHealthAndFitness : WTTweakBase {
 
     [bool]RemoveTweak() {
         # BingHealthAndFitness
-        Get-AppxPackage -AllUsers Microsoft.BingHealthAndFitness | Remove-AppxPackage
+        [WTTweakBase]::RemoveAppxPackage("Microsoft.BingHealthAndFitness")
+
         return $true
     }
 }

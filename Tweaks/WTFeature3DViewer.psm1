@@ -19,7 +19,8 @@ class WTFeature3DViewer : WTTweakBase {
 
     [bool]RemoveTweak() {
         # 3DViewer
-        Get-AppxPackage -AllUsers *3dviewer* | Remove-AppxPackage
+        [WTTweakBase]::RemoveAppxPackage("*3dviewer*")
+
         return $true
     }
 }

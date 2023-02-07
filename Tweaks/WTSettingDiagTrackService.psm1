@@ -13,7 +13,8 @@ class WTSettingDiagTrackService : WTTweakBase {
         $this.Name        = "SettingDiagTrackService"
         $this.Alias       = "DiagTrackService"
         $this.Description = "Connected User Experiences and Telemetry (previously named Diagnostics Tracking Service)."
-        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.AllowedOperations = [WTTweakActions]::Enable +
+                                  [WTTweakActions]::Disable
         $this.Categories        = [WTTweakCategories]::System,
                                   [WTTweakCategories]::Privacy, 
                                   [WTTweakCategories]::Performance
@@ -21,17 +22,17 @@ class WTSettingDiagTrackService : WTTweakBase {
 
     [bool]EnableTweak() {
         # DiagTrackService
-    	Set-Service "DiagTrack" -StartupType Automatic
-	    Start-Service "DiagTrack" -WarningAction SilentlyContinue
-        
+        Set-Service "DiagTrack" -StartupType Automatic
+        Start-Service "DiagTrack" -WarningAction SilentlyContinue
+
         return $true
     }
 
     [bool]DisableTweak() {
         # DiagTrackService
-    	Stop-Service "DiagTrack" -WarningAction SilentlyContinue
-	    Set-Service "DiagTrack" -StartupType Disabled
-        
+        Stop-Service "DiagTrack" -WarningAction SilentlyContinue
+        Set-Service "DiagTrack" -StartupType Disabled
+
         return $true
     }
 }

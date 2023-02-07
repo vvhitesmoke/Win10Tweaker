@@ -14,11 +14,13 @@ class WTFeatureMicrosoftYourPhone : WTTweakBase {
         $this.Alias       = "PhoneLink"
         $this.Description = "Microsoft Your Phone application"
         $this.AllowedOperations = [WTTweakActions]::Remove
+        $this.Categories        = [WTTweakCategories]::WindowsApp
     }
 
     [bool]RemoveTweak() {
         # MicrosoftYourPhone
-        Get-AppxPackage -AllUsers Microsoft.YourPhone | Remove-AppxPackage
+        [WTTweakBase]::RemoveAppxPackage("Microsoft.YourPhone")
+
         return $true
     }
 }

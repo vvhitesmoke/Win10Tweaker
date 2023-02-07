@@ -13,25 +13,24 @@ class WTSettingAdvertisingInfo : WTTweakBase {
         $this.Name        = "SettingAdvertisingInfo"
         $this.Alias       = "AdvertisingInfo"
         $this.Description = "Advertising info (by group policy)"
-        $this.AllowedOperations = [WTTweakActions]::Enable + [WTTweakActions]::Disable
+        $this.AllowedOperations = [WTTweakActions]::Enable +
+                                  [WTTweakActions]::Disable
         $this.Categories        = [WTTweakCategories]::System,
                                   [WTTweakCategories]::Privacy
     }
 
     [bool]EnableTweak() {
         # AdvertisingInfo
-    	Remove-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
-        
+        Remove-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Name "DisableTailoredExperiencesWithDiagnosticData" -ErrorAction SilentlyContinue
+
         return $true
     }
 
     [bool]DisableTweak() {
         # AdvertisingInfo
-    	if (!(Test-Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent")) {
-		    New-Item -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Force | Out-Null
-    	}
-	    Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
-        
+        [WTTweakBase]::CreateRegistryHive("HKCU:\Software\Policies\Microsoft\Windows\CloudContent")
+        Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\CloudContent" -Name "DisableTailoredExperiencesWithDiagnosticData" -Type DWord -Value 1
+
         return $true
     }
 }
