@@ -31,8 +31,20 @@ class WTTweakBase {
                 $ret = $this.DisableTweak()
             }
 
+            ([WTTweakActions]::Add) {
+                $ret = $this.AddTweak()
+            }
+
             ([WTTweakActions]::Remove) {
                 $ret = $this.RemoveTweak()
+            }
+
+            ([WTTweakActions]::SetLow) {
+                $ret = $this.SetLowTweak()
+            }
+
+            ([WTTweakActions]::SetHigh) {
+                $ret = $this.SetHighTweak()
             }
 
             default {
@@ -53,7 +65,22 @@ class WTTweakBase {
         return $false
     }
 
+    [bool] AddTweak() {
+        [WTOut]::Fail("Method not implemented")
+        return $false
+    }
+
     [bool] RemoveTweak() {
+        [WTOut]::Fail("Method not implemented")
+        return $false
+    }
+
+    [bool] SetLowTweak() {
+        [WTOut]::Fail("Method not implemented")
+        return $false
+    }
+
+    [bool] SetHighTweak() {
         [WTOut]::Fail("Method not implemented")
         return $false
     }

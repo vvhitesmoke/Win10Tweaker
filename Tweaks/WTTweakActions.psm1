@@ -9,5 +9,8 @@
     None    =  0
     Enable  =  1
     Disable =  2
-    Remove  =  4
+    Add     =  4
+    Remove  =  8
+    SetLow  = 16
+    SetHigh = 32
 }
